@@ -1317,20 +1317,20 @@ cols &lt;- c('classe', 'pColour', 'magnet_belt_x', 'magnet_belt_y', 'magnet_belt
 <h3>Summary of Prediction Accuracy on the Validation Set</h3>
 <p>The most accurate prediction given overall on the Validation dataset is from the Random Forest model using a combination of the Role, Pitch &amp; Yaw and Magnet measurements from all the sensors.</p>
 </div>
-</div>
-<div id="running-best-prediction-model-on-the-testing-set" class="section level2">
-<h2>Running Best Prediction Model on the Testing Set</h2>
+<div id="running-best-prediction-model-on-the-testing-set" class="section level3">
+<h3>Running Best Prediction Model on the Testing Set</h3>
 <p>Apply the best model and set of features trained on the Training set (i.e. Random Forest using all roll, pitch &amp; yaw and magnet x, y &amp; z measurements) on the Testing set and confirm similar prediction results are given:</p>
-<div id="rpy-and-magnet-random-forest-model-on-the-testing-set" class="section level3">
-<h3>RPY and Magnet Random Forest Model on the Testing Set</h3>
+<div id="rpy-and-magnet-random-forest-model-on-testing-set" class="section level4">
+<h4>RPY and Magnet Random Forest Model on Testing Set</h4>
 <pre class="r"><code>  # Predict
   rf.v.rpy.magnet.all.prediction.cv.test &lt;- as.data.frame(predict(rf.v.rpy.magnet.all.varfit,newdata=testing))
   # Add to combined data frame
   df.prediction.test &lt;- data.frame('prediction'= rf.v.rpy.magnet.all.prediction.cv.test[,1])</code></pre>
 </div>
-<div id="estimated-out-of-sample-error-rate-and-confusion-matrix-on-the-testing-set" class="section level3">
-<h3>Estimated Out of Sample Error Rate and Confusion Matrix on the Testing Set</h3>
-<pre><code>## Estimated Out of Sample Error Rate:  94.72 %</code></pre>
+</div>
+<div id="estimated-out-of-sample-error-rate-and-confusion-matrix" class="section level3">
+<h3>Estimated Out of Sample Error Rate and Confusion Matrix</h3>
+<pre><code>## Estimated Out of Sample Error Rate:  5.28 %</code></pre>
 <pre><code>##           Reference
 ## Prediction    A    B    C    D    E
 ##          A 1080   36    3    0    5
@@ -1338,6 +1338,30 @@ cols &lt;- c('classe', 'pColour', 'magnet_belt_x', 'magnet_belt_y', 'magnet_belt
 ##          C    0   23  625   31    6
 ##          D    3   13   12  597   13
 ##          E    1    0    2    1  666</code></pre>
+<!-- ## Apply Model to Final Test File -->
+<!-- ### Load Final Test Data -->
+<!-- ```{r Load Test Data, warning=FALSE, echo=TRUE} -->
+<!--   tmpdata <- read.csv2(file='./Data/pml-testing.csv', header=TRUE, sep=',', strip.white=TRUE, na.strings='<NA>', stringsAsFactors = FALSE) -->
+<!-- ``` -->
+<!-- ### Pre-process Final Test Data -->
+<!-- Take only necessary columns as used in the selected: -->
+<!-- ```{r Pre-process Test Data, warning=FALSE, echo=TRUE} -->
+<!--   testing.final <- tmpdata[, c('problem_id',v.rpy.all,v.magnet.all)] -->
+<!-- ``` -->
+<!-- Change variables to numeric as before so they are accepted by the model: -->
+<!-- ```{r Change Data Types Test Data, warning=FALSE} -->
+<!--   excluded <- c(1) -->
+<!--   for (i in 1:ncol(testing.final)) {if(max(i==excluded) == 0) {testing.final[,i] <- as.numeric(testing.final[,i])}} -->
+<!-- ``` -->
+<!-- ### Apply Random Forest Model on Final Test Data -->
+<!-- ```{r RPY and Magnet RF Final Test, warning=FALSE, message=FALSE} -->
+<!--   # Predict -->
+<!--   rf.v.rpy.magnet.all.prediction.final <- as.data.frame(predict(rf.v.rpy.magnet.all.varfit, newdata=testing.final)) -->
+<!--   # Add prediction to data frame -->
+<!--   testing.final <- data.frame(testing.final, 'prediction'= rf.v.rpy.magnet.all.prediction.final[,1]) -->
+<!--   # Print predictions -->
+<!--   testing.final[,c('problem_id','prediction')] -->
+<!-- ``` -->
 </div>
 <div id="stop-the-cluster" class="section level3">
 <h3>Stop the cluster</h3>
